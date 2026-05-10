@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Chandran Narain",
+        "employer": "Jayaraman-Varkey",
+        "gross_salary": 2324453,
+        "net_salary": 1975785
+    },
+    {
+        "month": "February",
+        "employee_name": "Chandran Narain",
+        "employer": "Jayaraman-Varkey",
+        "gross_salary": 2324453,
+        "net_salary": 1975785
+    },
+    {
+        "month": "March",
+        "employee_name": "Chandran Narain",
+        "employer": "Jayaraman-Varkey",
+        "gross_salary": 2324453,
+        "net_salary": 1975785
+    }
+]

@@ -1,0 +1,151 @@
+{
+    "account_number": "8763140509",
+    "bank_name": "Mock SBI",
+    "monthly_balance": 1647274,
+    "transactions": [
+        {
+            "date": "2026-03-22",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-26",
+            "type": "DEBIT",
+            "amount": 21078,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-03-05",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-03",
+            "type": "DEBIT",
+            "amount": 29277,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-04-18",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-08",
+            "type": "DEBIT",
+            "amount": 29282,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-05-01",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-05-01",
+            "type": "DEBIT",
+            "amount": 10235,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-02-15",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-13",
+            "type": "DEBIT",
+            "amount": 33194,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-03-13",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-12",
+            "type": "DEBIT",
+            "amount": 17501,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-02-22",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-07",
+            "type": "DEBIT",
+            "amount": 11029,
+            "description": "Shopping"
+        },
+        {
+            "date": "2026-02-12",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-26",
+            "type": "DEBIT",
+            "amount": 12321,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-03-17",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-28",
+            "type": "DEBIT",
+            "amount": 19125,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-04-25",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-27",
+            "type": "DEBIT",
+            "amount": 17020,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-04-04",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-03",
+            "type": "DEBIT",
+            "amount": 33702,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-01-08",
+            "type": "CREDIT",
+            "amount": 38182,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-22",
+            "type": "DEBIT",
+            "amount": 17962,
+            "description": "EMI"
+        }
+    ]
+}

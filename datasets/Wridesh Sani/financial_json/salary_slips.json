@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Wridesh Sani",
+        "employer": "Om Ltd",
+        "gross_salary": 1364143,
+        "net_salary": 1159521
+    },
+    {
+        "month": "February",
+        "employee_name": "Wridesh Sani",
+        "employer": "Om Ltd",
+        "gross_salary": 1364143,
+        "net_salary": 1159521
+    },
+    {
+        "month": "March",
+        "employee_name": "Wridesh Sani",
+        "employer": "Om Ltd",
+        "gross_salary": 1364143,
+        "net_salary": 1159521
+    }
+]

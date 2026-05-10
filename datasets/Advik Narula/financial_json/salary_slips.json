@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Advik Narula",
+        "employer": "Gaba-Thakkar",
+        "gross_salary": 63618,
+        "net_salary": 54075
+    },
+    {
+        "month": "February",
+        "employee_name": "Advik Narula",
+        "employer": "Gaba-Thakkar",
+        "gross_salary": 63618,
+        "net_salary": 54075
+    },
+    {
+        "month": "March",
+        "employee_name": "Advik Narula",
+        "employer": "Gaba-Thakkar",
+        "gross_salary": 63618,
+        "net_salary": 54075
+    }
+]

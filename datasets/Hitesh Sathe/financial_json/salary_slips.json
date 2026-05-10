@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Hitesh Sathe",
+        "employer": "Venkatesh, Sarin and Sha",
+        "gross_salary": 241711,
+        "net_salary": 205454
+    },
+    {
+        "month": "February",
+        "employee_name": "Hitesh Sathe",
+        "employer": "Venkatesh, Sarin and Sha",
+        "gross_salary": 241711,
+        "net_salary": 205454
+    },
+    {
+        "month": "March",
+        "employee_name": "Hitesh Sathe",
+        "employer": "Venkatesh, Sarin and Sha",
+        "gross_salary": 241711,
+        "net_salary": 205454
+    }
+]

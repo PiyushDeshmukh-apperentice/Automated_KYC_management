@@ -1,0 +1,151 @@
+{
+    "account_number": "9884231465",
+    "bank_name": "Mock ICICI",
+    "monthly_balance": 620097,
+    "transactions": [
+        {
+            "date": "2026-04-06",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-11",
+            "type": "DEBIT",
+            "amount": 215539,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-04-25",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-29",
+            "type": "DEBIT",
+            "amount": 84776,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-01-11",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-15",
+            "type": "DEBIT",
+            "amount": 192607,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-01-20",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-27",
+            "type": "DEBIT",
+            "amount": 50579,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-01-30",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-03",
+            "type": "DEBIT",
+            "amount": 87780,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-04-03",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-05",
+            "type": "DEBIT",
+            "amount": 25331,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-02-07",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-30",
+            "type": "DEBIT",
+            "amount": 206077,
+            "description": "Shopping"
+        },
+        {
+            "date": "2026-03-02",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-04",
+            "type": "DEBIT",
+            "amount": 24985,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-03-17",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-09",
+            "type": "DEBIT",
+            "amount": 163138,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-04-27",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-17",
+            "type": "DEBIT",
+            "amount": 141819,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-04-30",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-03",
+            "type": "DEBIT",
+            "amount": 24910,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-01-30",
+            "type": "CREDIT",
+            "amount": 241711,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-11",
+            "type": "DEBIT",
+            "amount": 233174,
+            "description": "Investment"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Abdul Nagarajan",
+        "employer": "Patla Inc",
+        "gross_salary": 48758,
+        "net_salary": 41444
+    },
+    {
+        "month": "February",
+        "employee_name": "Abdul Nagarajan",
+        "employer": "Patla Inc",
+        "gross_salary": 48758,
+        "net_salary": 41444
+    },
+    {
+        "month": "March",
+        "employee_name": "Abdul Nagarajan",
+        "employer": "Patla Inc",
+        "gross_salary": 48758,
+        "net_salary": 41444
+    }
+]

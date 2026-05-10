@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "William Chakraborty",
+        "employer": "Agarwal Group",
+        "gross_salary": 293085,
+        "net_salary": 249122
+    },
+    {
+        "month": "February",
+        "employee_name": "William Chakraborty",
+        "employer": "Agarwal Group",
+        "gross_salary": 293085,
+        "net_salary": 249122
+    },
+    {
+        "month": "March",
+        "employee_name": "William Chakraborty",
+        "employer": "Agarwal Group",
+        "gross_salary": 293085,
+        "net_salary": 249122
+    }
+]

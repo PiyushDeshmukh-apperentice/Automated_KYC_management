@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Daksh Loke",
+        "employer": "Desai-Sanghvi",
+        "gross_salary": 38182,
+        "net_salary": 32454
+    },
+    {
+        "month": "February",
+        "employee_name": "Daksh Loke",
+        "employer": "Desai-Sanghvi",
+        "gross_salary": 38182,
+        "net_salary": 32454
+    },
+    {
+        "month": "March",
+        "employee_name": "Daksh Loke",
+        "employer": "Desai-Sanghvi",
+        "gross_salary": 38182,
+        "net_salary": 32454
+    }
+]

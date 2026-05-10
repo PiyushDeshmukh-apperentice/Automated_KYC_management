@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Bhavika Mishra",
+        "employer": "Jhaveri Inc",
+        "gross_salary": 240937,
+        "net_salary": 204796
+    },
+    {
+        "month": "February",
+        "employee_name": "Bhavika Mishra",
+        "employer": "Jhaveri Inc",
+        "gross_salary": 240937,
+        "net_salary": 204796
+    },
+    {
+        "month": "March",
+        "employee_name": "Bhavika Mishra",
+        "employer": "Jhaveri Inc",
+        "gross_salary": 240937,
+        "net_salary": 204796
+    }
+]

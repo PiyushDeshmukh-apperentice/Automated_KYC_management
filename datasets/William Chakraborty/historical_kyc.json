@@ -1,0 +1,26 @@
+[
+    {
+        "year": 2023,
+        "risk_score": 33,
+        "risk_level": "MEDIUM",
+        "review_frequency": "1_YEAR"
+    },
+    {
+        "year": 2024,
+        "risk_score": 42,
+        "risk_level": "MEDIUM",
+        "review_frequency": "1_YEAR"
+    },
+    {
+        "year": 2025,
+        "risk_score": 31,
+        "risk_level": "MEDIUM",
+        "review_frequency": "1_YEAR"
+    },
+    {
+        "year": 2026,
+        "risk_score": 45,
+        "risk_level": "MEDIUM",
+        "review_frequency": "1_YEAR"
+    }
+]

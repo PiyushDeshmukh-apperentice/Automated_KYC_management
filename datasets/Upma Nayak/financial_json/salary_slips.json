@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Upma Nayak",
+        "employer": "Talwar Group",
+        "gross_salary": 1415438,
+        "net_salary": 1203122
+    },
+    {
+        "month": "February",
+        "employee_name": "Upma Nayak",
+        "employer": "Talwar Group",
+        "gross_salary": 1415438,
+        "net_salary": 1203122
+    },
+    {
+        "month": "March",
+        "employee_name": "Upma Nayak",
+        "employer": "Talwar Group",
+        "gross_salary": 1415438,
+        "net_salary": 1203122
+    }
+]

@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Mekhala Ganesan",
+        "employer": "Rege-Bhargava",
+        "gross_salary": 61300,
+        "net_salary": 52105
+    },
+    {
+        "month": "February",
+        "employee_name": "Mekhala Ganesan",
+        "employer": "Rege-Bhargava",
+        "gross_salary": 61300,
+        "net_salary": 52105
+    },
+    {
+        "month": "March",
+        "employee_name": "Mekhala Ganesan",
+        "employer": "Rege-Bhargava",
+        "gross_salary": 61300,
+        "net_salary": 52105
+    }
+]

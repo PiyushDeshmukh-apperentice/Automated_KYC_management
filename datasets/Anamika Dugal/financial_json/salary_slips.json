@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Anamika Dugal",
+        "employer": "Handa-Lal",
+        "gross_salary": 889525,
+        "net_salary": 756096
+    },
+    {
+        "month": "February",
+        "employee_name": "Anamika Dugal",
+        "employer": "Handa-Lal",
+        "gross_salary": 889525,
+        "net_salary": 756096
+    },
+    {
+        "month": "March",
+        "employee_name": "Anamika Dugal",
+        "employer": "Handa-Lal",
+        "gross_salary": 889525,
+        "net_salary": 756096
+    }
+]

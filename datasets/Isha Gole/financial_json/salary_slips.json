@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Isha Gole",
+        "employer": "Tripathi-Setty",
+        "gross_salary": 84165,
+        "net_salary": 71540
+    },
+    {
+        "month": "February",
+        "employee_name": "Isha Gole",
+        "employer": "Tripathi-Setty",
+        "gross_salary": 84165,
+        "net_salary": 71540
+    },
+    {
+        "month": "March",
+        "employee_name": "Isha Gole",
+        "employer": "Tripathi-Setty",
+        "gross_salary": 84165,
+        "net_salary": 71540
+    }
+]

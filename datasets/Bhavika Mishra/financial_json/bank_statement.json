@@ -1,0 +1,181 @@
+{
+    "account_number": "1041531046",
+    "bank_name": "Mock SBI",
+    "monthly_balance": 681191,
+    "transactions": [
+        {
+            "date": "2026-01-10",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-15",
+            "type": "DEBIT",
+            "amount": 38058,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-01-03",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-05",
+            "type": "DEBIT",
+            "amount": 81394,
+            "description": "Shopping"
+        },
+        {
+            "date": "2026-03-22",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-01",
+            "type": "DEBIT",
+            "amount": 168552,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-03-19",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-07",
+            "type": "DEBIT",
+            "amount": 198117,
+            "description": "Shopping"
+        },
+        {
+            "date": "2026-04-18",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-01-18",
+            "type": "DEBIT",
+            "amount": 63371,
+            "description": "Shopping"
+        },
+        {
+            "date": "2026-03-04",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-02",
+            "type": "DEBIT",
+            "amount": 142489,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-01-23",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-04-05",
+            "type": "DEBIT",
+            "amount": 75829,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-02-19",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-02-14",
+            "type": "DEBIT",
+            "amount": 34195,
+            "description": "EMI"
+        },
+        {
+            "date": "2026-02-13",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-09",
+            "type": "DEBIT",
+            "amount": 227408,
+            "description": "Shopping"
+        },
+        {
+            "date": "2026-03-01",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-22",
+            "type": "DEBIT",
+            "amount": 21557,
+            "description": "Utility Payment"
+        },
+        {
+            "date": "2026-03-05",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-17",
+            "type": "DEBIT",
+            "amount": 97439,
+            "description": "Investment"
+        },
+        {
+            "date": "2026-03-31",
+            "type": "CREDIT",
+            "amount": 240937,
+            "description": "Salary Credit"
+        },
+        {
+            "date": "2026-03-18",
+            "type": "DEBIT",
+            "amount": 177015,
+            "description": "Shopping"
+        },
+        {
+            "date": "2026-02-07",
+            "type": "CREDIT",
+            "amount": 10421791,
+            "description": "Offshore Transfer"
+        },
+        {
+            "date": "2026-04-12",
+            "type": "CREDIT",
+            "amount": 19825539,
+            "description": "Offshore Transfer"
+        },
+        {
+            "date": "2026-01-08",
+            "type": "CREDIT",
+            "amount": 23511323,
+            "description": "Offshore Transfer"
+        },
+        {
+            "date": "2026-02-05",
+            "type": "CREDIT",
+            "amount": 19350791,
+            "description": "Offshore Transfer"
+        },
+        {
+            "date": "2026-02-06",
+            "type": "CREDIT",
+            "amount": 23820911,
+            "description": "Offshore Transfer"
+        }
+    ]
+}

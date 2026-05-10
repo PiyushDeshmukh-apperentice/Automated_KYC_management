@@ -1,0 +1,13 @@
+{
+    "portfolio_value": 42699681,
+    "funds": [
+        {
+            "scheme": "Large Cap Growth Fund",
+            "invested_amount": 4174894
+        },
+        {
+            "scheme": "Flexi Cap Equity Fund",
+            "invested_amount": 815396
+        }
+    ]
+}

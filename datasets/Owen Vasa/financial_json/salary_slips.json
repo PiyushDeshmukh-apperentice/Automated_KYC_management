@@ -1,0 +1,23 @@
+[
+    {
+        "month": "January",
+        "employee_name": "Owen Vasa",
+        "employer": "Narain and Sons",
+        "gross_salary": 41162,
+        "net_salary": 34987
+    },
+    {
+        "month": "February",
+        "employee_name": "Owen Vasa",
+        "employer": "Narain and Sons",
+        "gross_salary": 41162,
+        "net_salary": 34987
+    },
+    {
+        "month": "March",
+        "employee_name": "Owen Vasa",
+        "employer": "Narain and Sons",
+        "gross_salary": 41162,
+        "net_salary": 34987
+    }
+]

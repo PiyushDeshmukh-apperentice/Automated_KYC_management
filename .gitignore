@@ -1,0 +1,12 @@
+lfw_pairs_dataset
+account_aggregator.json
+digilocker.json
+profile.json
+verify_face.py
+faces.py
+fake.py
+data.py
+services/account_aggregator_service/__pycache__
+services/customer_profile_service/__pycache__
+services/digilocker_service/__pycache__
+services/shared_memory_service/__pycache__
