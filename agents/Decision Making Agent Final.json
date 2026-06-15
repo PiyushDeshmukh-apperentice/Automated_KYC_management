@@ -1,0 +1,404 @@
+{
+  "name": "Decision Making Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const input = $input.item.json;\nconst cust = input.customer_data || {};\nconst id = cust.identity || {};\nconst panApi = cust.pan_api_response || {};\n\nconst nameInput = (id.full_name || \"\").toLowerCase().trim();\nconst nameReg = (panApi.registered_name || \"\").toLowerCase().trim();\nconst addrProfile = (id.profile_address || \"\").toLowerCase().trim();\nconst addrUtility = (id.electricity_bill_address || \"\").toLowerCase().trim();\n\nlet status = \"PROCEED\";\nlet note = \"Verified.\";\nlet fraud = false;\n\nif (nameReg !== \"\" && nameInput !== nameReg) {\n  status = \"REJECT\";\n  note = `FRAUD: ${id.full_name} vs ${panApi.registered_name}`;\n  fraud = true;\n} else if (addrProfile !== \"\" && addrUtility !== \"\" && !addrProfile.includes(addrUtility) && !addrUtility.includes(addrProfile)) {\n  status = \"REVIEW\";\n  note = \"Address mismatch.\";\n}\n\nreturn {\n  ...input,\n  identity_status: status,\n  identity_note: note,\n  fraudulent: fraud\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -736,
+        -1264
+      ],
+      "id": "62a61447-8adc-4d41-bef2-5df3e4a99176",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.customer_category }}",
+                    "rightValue": "Farmer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5d850496-2ae8-4073-a006-78e0ae609436"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c5ef68e0-d6e7-4ab2-b9df-ed54373466db",
+                    "leftValue": "={{ $json.customer_category }}",
+                    "rightValue": "HNWI",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d536ca29-864b-4a35-b4eb-2ba70630a6b1",
+                    "leftValue": "={{ $json.customer_category }}",
+                    "rightValue": "Mass Affluent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -544,
+        -1280
+      ],
+      "id": "2f7a7d50-eb6c-46cb-a192-2c274621a7b4",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -1264
+      ],
+      "id": "e4609097-8927-40c6-9a72-139b79923606",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Financial Underwriter. DATA: {{ JSON.stringify($json) }}\n\nKYC SCHEDULING LOGIC:\nBased on the risk_score and risk_category, define a kyc_review_interval (in months):\n\nHigh Risk (Score < 40): 2 months.\n\nMedium Risk (Score 40-75): 6 months.\n\nLow Risk (Score > 75): 12 months.\n\nSTRICT RULES:\n\nIf 'disposition' is REJECT, return REJECT.\n\nIf 'identity_status' is REVIEW, next agent is Template Agent. You MUST describe the mismatch (e.g. \"Address mismatch\") in 'discrepancy_reason'.\n\nDo NOT return empty strings for 'discrepancy_reason' if identity_status is not PROCEED.\n\nReturn ONLY JSON: > {\n\"verdict\": {\"final_disposition\": \"...\"},\n\"decision_rationale\": {\"summary\": \"...\"},\n\"compliance\": {\"kyc_interval_months\": number, \"next_review_rationale\": \"...\"},\n\"routing\": {\"recommended_next_agent\": \"...\", \"discrepancy_reason\": \"...\"}\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        176,
+        -1264
+      ],
+      "id": "d69bba13-4c4b-4c43-a579-7fdab64ca472",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        48,
+        -1056
+      ],
+      "id": "1a4772e7-e887-4e12-98c9-820bc303e814",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "PHBJpgvRcxqagllv",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ai = $input.first().json;\nlet parsed = {};\ntry {\n  let txt = ai.text || ai.output || JSON.stringify(ai);\n  txt = txt.replace(/```json/gi, '').replace(/```/g, '').trim();\n  parsed = JSON.parse(txt.substring(txt.indexOf('{'), txt.lastIndexOf('}') + 1));\n} catch (e) { \n  parsed = { verdict: { final_disposition: \"REJECT\" } }; \n}\n\nconst data = $('Aggregate').first().json;\nconst disp = parsed.verdict?.final_disposition || \"REJECT\";\n\n// THE TRUTH LOCK\nconst reason = (parsed.routing?.discrepancy_reason && parsed.routing.discrepancy_reason !== \"\") \n               ? parsed.routing.discrepancy_reason \n               : (data.identity_note || \"\");\n\nreturn {\n  customer_data: data.customer_data || data,\n  customer_category: data.customer_category || data.segment,\n  risk_metrics: {\n    score: data.risk_score || 0,\n    category: data.risk_category || \"Unknown\"\n  },\n  // NEW: KYC Scheduling data from LLM\n  kyc_schedule: {\n    interval_months: parsed.compliance?.kyc_interval_months || 12,\n    review_rationale: parsed.compliance?.next_review_rationale || \"Standard review cycle.\"\n  },\n  log_entry: `Verdict: ${disp}. Rationale: ${parsed.decision_rationale?.summary || \"N/A\"}`,\n  task_type: (disp === \"MANUAL_REVIEW\" || disp === \"REJECT\") ? \"Alert\" : \"None\",\n  call_agent: (disp === \"MANUAL_REVIEW\") ? \"Template Agent\" : \"RM Banker\",\n  discrepancy_reason: reason \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        -1264
+      ],
+      "id": "21397f95-95cd-460c-b858-c3538796d2e3",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -944,
+        -1264
+      ],
+      "id": "699295cf-9167-491d-a5d7-3df38a627cf8",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $input.item.json;\nconst c = prev.customer_data || {};\nconst foir = (c.financial?.cibil?.total_emi || 0) / (c.data?.employment?.monthly_income || 1);\n\nlet mathDisp = (foir < 0.65) ? \"APPROVE\" : \"REJECT\";\nlet finalDisp = (prev.identity_status === \"REJECT\" || mathDisp === \"REJECT\") ? \"REJECT\" : (prev.identity_status === \"REVIEW\" ? \"MANUAL_REVIEW\" : \"APPROVE\");\n\n// Risk Score: 100 is perfect, 0 is worst.\nconst riskScore = Math.max(0, Math.min(100, 100 - (foir * 100)));\n\n// Risk Category for AI scheduling\nlet riskCategory = \"Low\";\nif (riskScore < 40) riskCategory = \"High\";\nelse if (riskScore < 75) riskCategory = \"Medium\";\n\nreturn { \n  ...prev, \n  segment: \"Farmer\", \n  foir: foir.toFixed(2), \n  disposition: finalDisp,\n  risk_score: Math.round(riskScore),\n  risk_category: riskCategory\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        -1440
+      ],
+      "id": "d5367e17-9fd9-4350-9572-3f50d41a226e",
+      "name": "Farmer"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $input.item.json;\nconst c = prev.customer_data || {};\nconst wealth = (c.financial?.wealth?.mutual_funds || 0) + (c.financial?.wealth?.insurance_val || 0);\nconst debt = c.financial?.cibil?.total_debt || 0; \nconst emi = c.financial?.cibil?.total_emi || 0;\nconst inc = c.data?.employment?.monthly_income || 1;\n\nconst foir = emi / inc;\nconst wealthCover = debt > 0 ? (wealth / debt) : 100; \n\nlet mathDisp = (foir < 0.8 && wealthCover > 2.0) ? \"APPROVE\" : \"MANUAL_REVIEW\";\n\nlet finalDisp = mathDisp;\nif (prev.identity_status === \"REJECT\") finalDisp = \"REJECT\";\n\n// Risk Score: Wealth cover (capped at 5x for scoring) + FOIR\nconst wealthComp = Math.min(5, wealthCover) * 20; // 5x cover = 100 points\nconst foirComp = Math.max(0, 100 - (foir * 100));\nconst riskScore = (wealthComp * 0.6) + (foirComp * 0.4);\n\nlet riskCategory = \"Low\";\nif (riskScore < 40) riskCategory = \"High\";\nelse if (riskScore < 75) riskCategory = \"Medium\";\n\nreturn { \n  ...prev, \n  segment: \"HNI\", \n  foir: foir.toFixed(2), \n  wealth_cover: wealthCover.toFixed(2), \n  disposition: finalDisp,\n  risk_score: Math.round(riskScore),\n  risk_category: riskCategory\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        -1264
+      ],
+      "id": "92a51b28-b730-4259-a162-2f4895d3abc4",
+      "name": "HNI"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $input.item.json;\nconst c = prev.customer_data || {};\nconst foir = (c.financial?.cibil?.total_emi || 0) / (c.data?.employment?.monthly_income || 1);\n\nlet mathDisp = (foir < 0.5) ? \"APPROVE\" : \"REJECT\";\nlet finalDisp = (prev.identity_status === \"REJECT\" || mathDisp === \"REJECT\") ? \"REJECT\" : (prev.identity_status === \"REVIEW\" ? \"MANUAL_REVIEW\" : \"APPROVE\");\n\n// Risk Score: Stricter penalty for Mass segment\nconst riskScore = Math.max(0, Math.min(100, 100 - (foir * 150)));\n\nlet riskCategory = \"Low\";\nif (riskScore < 40) riskCategory = \"High\";\nelse if (riskScore < 75) riskCategory = \"Medium\";\n\nreturn { \n  ...prev, \n  segment: \"Mass\", \n  foir: foir.toFixed(2), \n  disposition: finalDisp,\n  risk_score: Math.round(riskScore),\n  risk_category: riskCategory\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        -1120
+      ],
+      "id": "95a133f6-a3de-4dbd-a238-f1a08b5a20e6",
+      "name": "Mass"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        336,
+        -1056
+      ],
+      "id": "1d680b34-d25b-49dd-bbcd-6e6b9ca348bd",
+      "name": "Insert row in Data table"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        -1056
+      ],
+      "id": "623049ca-77d1-4c2e-ac80-a09d400cf12e",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Farmer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HNI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mass",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Farmer": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HNI": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mass": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row in Data table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "dc935b87-32e5-43d3-b330-e1a0f907d52b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1a82068c1ee9dc496c99a5049657e2eb88f5fb3b9c48b12258672f91fedcd5eb"
+  },
+  "id": "BBMFQ8nC898HhyHh",
+  "tags": []
+}

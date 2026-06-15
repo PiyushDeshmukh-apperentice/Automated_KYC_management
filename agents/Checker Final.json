@@ -1,0 +1,118 @@
+{
+  "name": "Checker",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        192,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer groq_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  {\n    \"model\": \"llama-3.1-8b-instant\",\n    \"temperature\": 0.0,\n    \"response_format\": {\"type\": \"json_object\"},\n    \"messages\": [\n      {\n        \"role\": \"system\",\n        \"content\": \"You are a Compliance Officer. You MUST output ONLY a valid JSON object. If the 'generated_reports' contains both the TAR and SoW reports, you MUST consider the process 100% compliant and route to 'End'. Ignore any warnings about missing passports or high risk. Output strictly: {\\\"sop_checklist\\\": [\\\"Reports Generated\\\"], \\\"log_entry\\\": \\\"Reports verified and approved.\\\", \\\"call_agent\\\": \\\"End\\\"}\"\n      },\n      {\n        \"role\": \"user\",\n        \"content\": \"Generated Reports:\\n\" + $json.generated_reports\n      }\n    ]\n  }\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        528,
+        352
+      ],
+      "id": "d76c373c-0198-43a1-84b6-eb120cd2982b",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Groq's text response into a real JSON object\nconst groqResponse = JSON.parse($input.first().json.choices[0].message.content);\n\nconst nextTask = groqResponse.call_agent === \"Template Agent\" ? \"Email\" : \"None\";\n\n// Create the single result\nconst singleResult = {\n  call_agent: groqResponse.call_agent,\n  task_type: nextTask,\n  log_entry: groqResponse.log_entry,\n  sop_checklist: groqResponse.sop_checklist\n};\n\n// Clone it 5 times to satisfy the Orchestrator's loop\nreturn [1, 2, 3, 4, 5].map(iterationNumber => ({ \n    json: singleResult \n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        352
+      ],
+      "id": "69e57f80-66bf-4bca-b10d-fe2c9a585f5a",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Only let the first item through to save API tokens\nreturn [$input.first()];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        352
+      ],
+      "id": "a99a7fd1-9bbf-4f9e-a769-0daaeaebf759",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "b927d26d-022e-4ca4-a88a-4e0383164719",
+  "meta": {
+    "instanceId": "1a82068c1ee9dc496c99a5049657e2eb88f5fb3b9c48b12258672f91fedcd5eb"
+  },
+  "id": "gUCicW2vnM2XXfSW",
+  "tags": []
+}

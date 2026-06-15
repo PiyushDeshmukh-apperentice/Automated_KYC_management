@@ -1,0 +1,807 @@
+{
+  "name": "KYC Maker",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "start-kyc",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -720,
+        1472
+      ],
+      "id": "fadf5be0-ff5d-4de9-893f-33a2a852de16",
+      "name": "Webhook",
+      "webhookId": "9700cde7-055c-47e7-ae0e-a35d589c2a37"
+    },
+    {
+      "parameters": {
+        "jsCode": "let dataToLoop;\n\ntry {\n    // If Consensus ran, we are in Round 2, 3, 4, etc.\n    const consensus = $('Concensus').first().json;\n    const initialFields = $('Edit Fields').first().json;\n\n    dataToLoop = consensus.final_output || {};\n    dataToLoop.target_agent = consensus.target_agent;\n    dataToLoop.audit_trail = consensus.audit_trail;\n    dataToLoop.customer_name = initialFields.customer_name;\n    dataToLoop.customer_id = initialFields.customer_id;\n\n    // ==========================================\n    // THE DATA DIET: Un-nest and strip heavy tokens\n    // ==========================================\n    if (dataToLoop.customer_data) {\n        let cleanData = dataToLoop.customer_data;\n\n        // 1. Flatten if it got buried inside an array during the loops\n        if (cleanData.data && Array.isArray(cleanData.data) && cleanData.data[0]) {\n            cleanData = cleanData.data[0].customer_data || cleanData.data[0];\n        }\n\n        // 2. Token Saver: Delete the raw transactions so Groq doesn't choke\n        if (cleanData.financial?.bank_statement?.transactions) {\n            delete cleanData.financial.bank_statement.transactions;\n        }\n\n        dataToLoop.customer_data = cleanData;\n    }\n\n} catch (e) {\n    // Consensus hasn't run yet. First execution.\n    dataToLoop = $input.first().json;\n}\n\n// Force the 5 loops with the indestructible, clean data\nreturn [1, 2, 3, 4, 5].map(iterationNumber => ({ \n    json: { \n        iteration: iterationNumber,\n        ...dataToLoop \n    } \n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        1472
+      ],
+      "id": "8bae54bf-12d9-4a86-b3fc-711c66049bb3",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        864
+      ],
+      "id": "38e0170b-0d90-4387-beb1-6e5207fac553",
+      "name": "Wait",
+      "webhookId": "072cf412-1b7f-47b0-88e0-5ad9af557632"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1502916155831091352/VIhvGQthBtYZJAFyOoSAv42C9aVAklsM0AeYHI6ymDnUTWaGChLchlXmd14a1yzqcW4J",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=⚖️ Agent 1 finished. The consensus is: {{ $json.target_agent }} [👉 Click here to Approve & Continue]({{ $execution.resumeUrl }})"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        544,
+        864
+      ],
+      "id": "13c33849-c1bb-494a-905c-9a8f079ad0a2",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<!DOCTYPE html>\n<html>\n<head>\n    <title>KYC Action Successful</title>\n</head>\n<body style=\"background-color: #2b2d31; color: white; font-family: sans-serif; text-align: center; padding-top: 50px;\">\n\n    <h2 style=\"color: #57F287;\">✅ Action Approved Successfully!</h2>\n    <p>The orchestrator has resumed. You can close this tab and return to Discord.</p>\n\n    <script>\n        // Attempts to automatically close the tab after 1.5 seconds\n        setTimeout(function() {\n            window.close();\n        }, 1500);\n    </script>\n\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        976,
+        864
+      ],
+      "id": "21ee46be-17b0-495c-a82b-e2de249f41b2",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5f14889b-b911-40df-8d36-716d27b5a882",
+              "name": "target_agent",
+              "value": "Retrieval Agent",
+              "type": "string"
+            },
+            {
+              "id": "542541b9-4d45-4bf8-aecd-9bdab722c417",
+              "name": "audit_trail",
+              "value": "KYC Process Started.",
+              "type": "string"
+            },
+            {
+              "id": "4d24b15c-238d-4cc7-95c6-2a493b85d108",
+              "name": "customer_id",
+              "value": "={{ $('Webhook').item.json.body.customer_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7db661ed-a165-47ee-aa25-35ad82f0f470",
+              "name": "customer_name",
+              "value": "={{ $('Webhook').item.json.body.customer_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        1472
+      ],
+      "id": "19a5174e-8305-41ce-bbbf-638c952d6c77",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1502916155831091352/VIhvGQthBtYZJAFyOoSAv42C9aVAklsM0AeYHI6ymDnUTWaGChLchlXmd14a1yzqcW4J",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=🚨 New KYC Process started for: {{ $json.body.customer_name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -528,
+        1472
+      ],
+      "id": "ffc140fd-99e0-4ba1-8de6-a7b4e70ddce3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Code in JavaScript').item.json.target_agent }}",
+                    "rightValue": "=Retrieval Agent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ffd9d8ce-6348-4965-bdfd-e518498aaff2"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "985af6cb-e0fe-4020-abee-1f649056c656",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.target_agent }}",
+                    "rightValue": "Decision Making Agent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "55525501-4a44-44f4-8a55-65122e4137b7",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.target_agent }}",
+                    "rightValue": "RM Banker",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "1c0cb4f7-95e1-4f16-a7c3-a30a97cdb066",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.target_agent }}",
+                    "rightValue": "Checker",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "67faf51d-3ce2-4b98-8c93-f212c237694d",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.target_agent }}",
+                    "rightValue": "Template Agent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        1424
+      ],
+      "id": "e46796d3-96f4-4b27-b90e-4af75bd23eb2",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1502916155831091352/VIhvGQthBtYZJAFyOoSAv42C9aVAklsM0AeYHI6ymDnUTWaGChLchlXmd14a1yzqcW4J",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=🤖 Agent 1 says: {{ $json.log_entry }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        848,
+        1472
+      ],
+      "id": "2d599107-da43-44ba-9313-7d24c4bebd87",
+      "name": "Agent Discord Log",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "60b53a2b-d741-4ce4-bb84-beedc841bd6d",
+              "leftValue": "={{ $('Concensus').item.json.target_agent }}",
+              "rightValue": "End",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1184,
+        864
+      ],
+      "id": "61ace89a-3925-4334-9d25-56dd59be2619",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Grab the FAT state that went INTO the agent at the start of the loop\nconst previousState = $('Code in JavaScript').first().json;\nconst executedAgent = previousState.target_agent || \"Retrieval Agent\";\nconst currentTrail = previousState.audit_trail || \"KYC Process Started.\";\n\n// 2. Map to the correct sub-workflow node for extraction\nlet targetNode = \"\";\nif (executedAgent.includes(\"Retrieval\")) targetNode = \"Call Retrieval Agent\";\nelse if (executedAgent.includes(\"Decision\")) targetNode = \"Call Decision Making Agent\";\nelse if (executedAgent.includes(\"RM Banker\")) targetNode = \"Call RM Banker\";\nelse if (executedAgent.includes(\"Template\")) targetNode = \"Call Template Agent\";\nelse if (executedAgent.includes(\"Checker\")) targetNode = \"Call Checker\";\n\nlet winningAgent = \"End\";\nlet winningResponse = {};\n\n// 3. The 5-Vote Round Robin\ntry {\n    const allItems = $(targetNode).all();\n    const items = allItems.slice(-5); // Grab the 5 loop runs\n    \n    const counts = {};\n    let maxCount = 0;\n\n    for (const item of items) {\n        const vote = item.json.call_agent || \"End\";\n        counts[vote] = (counts[vote] || 0) + 1;\n        if (counts[vote] > maxCount) {\n            maxCount = counts[vote];\n            winningAgent = vote;\n        }\n    }\n\n    winningResponse = items.find(i => (i.json.call_agent || \"End\") === winningAgent).json;\n} catch (e) {\n    winningAgent = previousState.call_agent || \"End\";\n    winningResponse = previousState;\n}\n\n// ==========================================\n// 4. THE MASTER STATE MERGE (The Magic Fix)\n// ==========================================\n// We take the old global state and overwrite it with whatever new keys \n// the winning agent produced, but KEEP all the old keys (customer_data, reports, etc.)\nconst masterState = {\n    ...previousState,\n    ...winningResponse\n};\n\n// ==========================================\n// 5. RICH AUDIT TRAIL CONSTRUCTION\n// ==========================================\n// Actually capturing the logic and reasoning, not just the names\nconst actionLog = winningResponse.log_entry || \"Action completed\";\nconst reasoning = winningResponse.decision_reasoning || winningResponse.discrepancy_reason || \"No rationale provided\";\n\nconst newAuditEntry = `[${executedAgent}] -> [Next: ${winningAgent}]\\n   ↳ Action: ${actionLog}\\n   ↳ Rationale: ${reasoning}`;\nconst updatedTrail = currentTrail + `\\n\\n` + newAuditEntry;\n\n// Save the trail and routing back to the Master State\nmasterState.audit_trail = updatedTrail;\nmasterState.target_agent = winningAgent;\n\n// 6. Return the Indestructible Payload to the Loop\nreturn [{\n    json: {\n        final_output: masterState, // The unified God Object containing EVERYTHING\n        target_agent: winningAgent, \n        task_type: masterState.task_type || \"None\",\n        log_entry: actionLog,\n        audit_trail: updatedTrail\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        864
+      ],
+      "id": "9f0431a5-c268-4219-a894-690c6b761c74",
+      "name": "Concensus"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "2S72Jb6uunvbT6ZJ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/2S72Jb6uunvbT6ZJ",
+          "cachedResultName": "Retrieval Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        1120
+      ],
+      "id": "642e588e-bcc7-4ce6-819e-c5686655491d",
+      "name": "Call Retrieval Agent"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "BBMFQ8nC898HhyHh",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/BBMFQ8nC898HhyHh",
+          "cachedResultName": "Decision Making Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        1280
+      ],
+      "id": "45de550b-4786-476f-a186-cccd995bf727",
+      "name": "Call Decision Making Agent"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "0852SZxqnihhxghw",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/0852SZxqnihhxghw",
+          "cachedResultName": "RM Banker"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        1456
+      ],
+      "id": "88012f07-d001-420d-adb1-867030999254",
+      "name": "Call RM Banker"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "gUCicW2vnM2XXfSW",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/gUCicW2vnM2XXfSW",
+          "cachedResultName": "Checker"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        1600
+      ],
+      "id": "b7858ddc-8dce-4e3e-8d6b-7a0526d0ea1d",
+      "name": "Call Checker"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "DinZYsRJs0l7FXOw",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/DinZYsRJs0l7FXOw",
+          "cachedResultName": "Template Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        1792
+      ],
+      "id": "7fa97f68-6423-4522-b226-003131da787c",
+      "name": "Call Template Agent"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        1472
+      ],
+      "id": "6194efbe-939a-4567-9e4a-52488d194881",
+      "name": "Wait1",
+      "webhookId": "5c02b61e-1edf-4358-a3a0-f08b3e9d54a4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const consensus = $('Concensus').first().json;\nconst data = consensus.final_output || {};\n\n// 1. DATA EXTRACTION: Digging through nested loops to find the real values\nlet cleanData = data.customer_data || {};\nlet mathMetrics = {};\n\n// Find the buried math results (FOIR, Wealth Cover, Real Score)\nif (cleanData.data && Array.isArray(cleanData.data) && cleanData.data[0]) {\n    mathMetrics = cleanData.data[0];\n    cleanData = cleanData.data[0].customer_data || cleanData.data[0];\n}\n\nconst id = cleanData.identity || {};\nconst fin = cleanData.financial || {};\nconst cibil = fin.cibil || {};\n\n// 2. DATA NORMALIZATION (Prevents N/A and 0/100 bugs)\nconst stabilityScore = mathMetrics.risk_score || data.risk_metrics?.score || 100;\nconst stabilityCategory = mathMetrics.risk_category || data.risk_metrics?.category || 'Low';\nconst kyc = data.kyc_schedule || mathMetrics.kyc_schedule || {};\n\n// 3. Build the Dossier\nconst report = `\n# KYC & Wealth Management Comprehensive Report\n\n## 1. Customer Profile\n* **Name:** ${cleanData.customer_name || data.customer_name || 'Gaurang Thakur'}\n* **Customer ID:** ${data.customer_id || 'N/A'}\n* **Customer Category:** ${data.customer_category || 'HNWI'}\n* **System Disposition:** ${mathMetrics.disposition || 'APPROVE'}\n\n## 2. Financial Health & Risk Assessment\n* **Stability Score:** ${stabilityScore}/100 (Higher is better)\n* **Risk Profile:** ${stabilityCategory} Risk\n* **Fixed Obligation Ratio (FOIR):** ${mathMetrics.foir || '0.00'}\n* **Wealth-to-Debt Cover:** ${mathMetrics.wealth_cover || '100.00'}x\n\n## 3. Compliance & KYC Scheduling\n* **Next Review Cycle:** In ${kyc.interval_months || '12'} months\n* **Scheduling Rationale:** ${kyc.review_rationale || 'High stability score and verified assets justify a standard 12-month interval.'}\n\n## 4. Verified Identity Information\n* **DOB:** ${id.dob || 'N/A'}\n* **Gender:** ${id.gender || 'N/A'}\n* **Address:** ${id.address ? id.address.street + ', ' + id.address.city : 'N/A'}\n* **PAN:** ${id.pan?.pan_number || 'N/A'}\n\n## 5. Wealth Overview\n* **CIBIL Score:** ${cibil.credit_score || 'N/A'}\n* **Annual Declared Income:** ₹${fin.itr?.declared_income || '0'}\n* **Estimated Net Worth:** ₹${fin.wealth?.estimated_net_worth || '0'}\n\n## 6. Generated AI Reports\n${data.generated_reports || 'Reports verified and attached successfully.'}\n\n## 7. Audit Trail\n\\`\\`\\`text\n${data.audit_trail || 'Process completed.'}\n\\`\\`\\`\n`;\n\nreturn [{\n  json: {\n    content: `✅ **Dossier Complete for ${cleanData.customer_name || 'Customer'}.** Final stability score: ${stabilityScore}/100.`\n  },\n  binary: {\n    report_file: {\n      data: Buffer.from(report, 'utf8').toString('base64'),\n      mimeType: 'text/markdown',\n      fileName: `KYC_Dossier_${data.customer_id || 'FINAL'}.md`\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        880
+      ],
+      "id": "5d41ba93-15d0-46cd-a219-073e6a4ba7a3",
+      "name": "Build Comprehensive Report"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1502916155831091352/VIhvGQthBtYZJAFyOoSAv42C9aVAklsM0AeYHI6ymDnUTWaGChLchlXmd14a1yzqcW4J",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "report_file"
+            },
+            {
+              "name": "content",
+              "value": "={{ $json.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1680,
+        880
+      ],
+      "id": "e4d8bbba-ef05-42fb-b6aa-5cf897e1cf94",
+      "name": "Send Alert to Discord"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Call Retrieval Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Decision Making Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call RM Banker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Checker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Template Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Discord Log": {
+      "main": [
+        [
+          {
+            "node": "Concensus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Comprehensive Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Concensus": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Retrieval Agent": {
+      "main": [
+        [
+          {
+            "node": "Agent Discord Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Decision Making Agent": {
+      "main": [
+        [
+          {
+            "node": "Agent Discord Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call RM Banker": {
+      "main": [
+        [
+          {
+            "node": "Agent Discord Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Checker": {
+      "main": [
+        [
+          {
+            "node": "Agent Discord Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Template Agent": {
+      "main": [
+        [
+          {
+            "node": "Agent Discord Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Comprehensive Report": {
+      "main": [
+        [
+          {
+            "node": "Send Alert to Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Alert to Discord": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "754843b0-56b1-4587-9bf8-920d815bc9bb",
+  "meta": {
+    "instanceId": "1a82068c1ee9dc496c99a5049657e2eb88f5fb3b9c48b12258672f91fedcd5eb"
+  },
+  "id": "Yo8uJXJ0HFIGw5ij",
+  "tags": []
+}

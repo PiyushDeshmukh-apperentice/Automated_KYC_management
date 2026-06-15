@@ -1,0 +1,141 @@
+{
+  "name": "RM Banker",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "e340ed6f-779d-43df-8916-540310edae16",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        1808,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: $input.first().json\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2624,
+        640
+      ],
+      "id": "568f7d7a-1806-4275-84d9-e8656f6c5c2f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Customer:\n{{ $json.customer_data }}\n\nAudit Trail:\n{{ $json.audit_trail }}\n\nReview the customer file and audit trail.\n\nIf there is any discrepancy, missing information, compliance issue, or validation failure:\n- task_type = \"Email\"\n\nIf everything is correct and approved:\n- task_type = \"Final_Reports\"\n\nReturn ONLY valid JSON.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are the RM Banker.\n\nReview the customer data and the Agent Audit Trail.\n\nIf there is a discrepancy, route to the Template Agent for an email.\n\nIf the file is perfect, route to the Template Agent to generate the Final Reports.\n\nReturn ONLY valid JSON.\n\n{\n  \"decision_reasoning\": \"string\",\n  \"log_entry\": \"string\",\n  \"task_type\": \"Email or Final_Reports\",\n  \"call_agent\": \"Template Agent\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2016,
+        640
+      ],
+      "id": "ff9ae668-bc1c-4614-90e8-217516b5124c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1888,
+        848
+      ],
+      "id": "cb2a834b-b807-424e-91bc-5ac82e0cd925",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Qc0rK4b4NFGCqUDc",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"decision_reasoning\": \"string\",\n  \"log_entry\": \"string\",\n  \"task_type\": \"string\",\n  \"call_agent\": \"string\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2192,
+        848
+      ],
+      "id": "4fa83409-7be7-4fda-8d4a-77807ab10bf0",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "471156d0-a25a-4c3c-b187-873fa7ced127",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "09022d910147d26d711590e216655b9847d9a3a5a5948aec8be34fd889540fb4"
+  },
+  "id": "BaN7FURVlssYAjjM",
+  "tags": []
+}

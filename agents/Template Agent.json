@@ -1,0 +1,559 @@
+{
+  "name": "Template Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "e47c5a47-679c-4223-ad20-d32c4bfee190",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -912,
+        1568
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aed95732-a528-438c-b90e-a4ce6ec4b88e",
+              "name": "call_agent",
+              "value": "={{ $('When Executed by Another Workflow').item.json.target_agent }}",
+              "type": "string"
+            },
+            {
+              "id": "ef253d3a-2dbd-41b5-9007-7b37ccf19edc",
+              "name": "customer_reply",
+              "value": "={{ $json.body.rm_notes }}",
+              "type": "string"
+            },
+            {
+              "id": "4df99786-41a8-4c3c-80b9-39020c69887a",
+              "name": "log_entry",
+              "value": "=\"RM Banker uploaded files/data. Notes: \" + $json.body.rm_notes",
+              "type": "string"
+            },
+            {
+              "id": "9426cb12-6746-40f1-ad8a-80ee88793d5a",
+              "name": "target_agent",
+              "value": "={{ $('When Executed by Another Workflow').item.json.target_agent }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        528,
+        1776
+      ],
+      "id": "b529723c-dcf9-47ce-a95a-9c4a259bdf7f",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "sendTo": "dewani.22310840@viit.ac.in",
+        "subject": "Action Required: Missing KYC Docs for Jane Doe",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        1776
+      ],
+      "id": "79ae8500-6c8e-43a7-a718-9cde591f491f",
+      "name": "Send a message",
+      "webhookId": "f9d23abb-7022-42b8-b68b-98d9c5a350f0"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "04a57bfd-9f75-4c95-af20-768e61063bd4",
+              "name": "sow_report",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        1280
+      ],
+      "id": "e22e3ede-edce-48a4-a25b-1c5500a79ea4",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c17216e-4dca-41a9-90d1-12681ce863d9",
+              "name": "call_agent",
+              "value": "Checker",
+              "type": "string"
+            },
+            {
+              "id": "1b880b90-715b-48ea-9879-a616211b3654",
+              "name": "log_entry",
+              "value": "Generated TAR and SoW reports successfully",
+              "type": "string"
+            },
+            {
+              "id": "1dfe5413-416b-43de-a1e5-a2996a4388d7",
+              "name": "generated_reports",
+              "value": "=TAR Report: \\n{{ $('Edit Fields4').item.json.tar_report }}\\n\\nSoW Report: \\n{{ $json.sow_report }}",
+              "type": "string"
+            },
+            {
+              "id": "6e36ef83-6687-4fef-a8b3-cb902ae323a3",
+              "name": "target_agent",
+              "value": "Checker",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1088,
+        1280
+      ],
+      "id": "792bc013-3478-4d7c-9f58-e8ba8928d9bb",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Only let the first item through to save API tokens\nreturn [$input.first()];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        1568
+      ],
+      "id": "6838c5a1-31bd-41c6-9c97-c0003088e6b4",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.task_type || $('When Executed by Another Workflow').item.json.task_type }}",
+                    "rightValue": "Final_Reports",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "420a36c2-37fa-4e17-bde8-3cbca3d6146b"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c643e772-ccfa-4f5f-b69b-fa4917fba848",
+                    "leftValue": "={{ $json.task_type || $('When Executed by Another Workflow').item.json.task_type }}",
+                    "rightValue": "Email",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -512,
+        1568
+      ],
+      "id": "30dd42b4-56a0-4ba4-9277-a3ceab22468b",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "04a57bfd-9f75-4c95-af20-768e61063bd4",
+              "name": "tar_report",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        1296
+      ],
+      "id": "5139a0e7-3ce3-4f05-8e02-fa1f86a15b13",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Get the data from whichever path just finished (Reports or Email)\nconst input = $input.first().json;\n\n// 2. Reach back to the start to rescue the raw data that Groq wiped\nconst triggerData = $('When Executed by Another Workflow').first().json;\n\n// 3. Build the perfect, single payload\nconst singleResult = {\n    // Routing\n    call_agent: input.call_agent || \"Checker\", \n    task_type: input.generated_reports ? \"Final_Reports\" : \"Email\",\n    log_entry: input.log_entry || \"Template Agent action completed.\",\n    \n    // The Rescued Data\n    customer_data: triggerData.customer_data || {},\n    audit_trail: triggerData.audit_trail || \"\",\n    \n    // The New Outputs (Depending on which path ran)\n    generated_reports: input.generated_reports || \"\",\n    customer_reply: input.customer_reply || \"\"\n};\n\n// 4. Clone it 5 times to satisfy the Orchestrator's loop\nreturn [1, 2, 3, 4, 5].map(iterationNumber => ({ \n    json: singleResult \n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        1584
+      ],
+      "id": "fc9557e8-589d-4715-b8fa-b8caa26f4247",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        1776
+      ],
+      "id": "5a990e1f-d747-4d71-95d1-9c89580178a9",
+      "name": "Wait2",
+      "webhookId": "a10e2c83-77d3-4b6e-9b96-7a75e5bbd917"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert KYC analyst.\n\nGenerate a professional Transaction Activity Report (TAR).\n\nRequirements:\n- Use professional banking language\n- Output Markdown format\n- Analyze customer transaction activity\n- Highlight risk indicators\n- Mention compliance observations\n- Provide a final conclusion\n- Do not ask questions\n- Use only the provided customer data\n\nCustomer Data:\n\n{{ JSON.stringify($json.customer_data, null, 2) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -208,
+        1296
+      ],
+      "id": "a478384f-eb3e-4435-94a5-3e1c557cca06",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        1520
+      ],
+      "id": "f2fda9df-a8dc-4ae0-85d1-1cd5a7a1b638",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Qc0rK4b4NFGCqUDc",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert KYC analyst.\n\nGenerate a professional Source of Wealth Corroboration Report.\n\nRequirements:\n- Output Markdown format\n- Analyze the customer's declared income\n- Analyze assets and net worth\n- Assess whether wealth sources appear reasonable\n- Highlight compliance concerns if any\n- Provide a final conclusion\n- Do not ask questions\n- Use only the provided customer data\n\nCustomer Data:\n\n{{ JSON.stringify($json.customer_data, null, 2) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        304,
+        1296
+      ],
+      "id": "d448e482-e0f3-4d4b-a07d-bfdbb8322177",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        320,
+        1472
+      ],
+      "id": "acc7835b-4842-41b9-9c16-6aa5d6667172",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "Qc0rK4b4NFGCqUDc",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a backend KYC orchestrator.\n\nWrite a concise and professional internal email to an RM Banker.\n\nCustomer Information:\n{{ JSON.stringify($json.customer_data, null, 2) }}\n\nMissing Information / Discrepancy:\n{{ $json.discrepancy_reason }}\n\nInstructions:\n- Explain what information is missing.\n- Ask the RM Banker to contact the customer.\n- Request the missing documents/details.\n- Mention that the documents should be uploaded through the provided secure link.\n- Use professional banking language.\n- Return plain text only.\n\nSecure Upload Link:\n{{ $execution.resumeUrl }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -304,
+        1664
+      ],
+      "id": "43ea7a69-e327-4b33-94ce-4189d7d3da65",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        1936
+      ],
+      "id": "6d8ad5e3-f095-4a53-b881-35f398503c73",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "Qc0rK4b4NFGCqUDc",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9d9ccf86-a083-4d9b-9f18-b4802488541e",
+  "meta": {
+    "instanceId": "09022d910147d26d711590e216655b9847d9a3a5a5948aec8be34fd889540fb4"
+  },
+  "id": "2C1UStkGXsY1q1qU",
+  "tags": []
+}

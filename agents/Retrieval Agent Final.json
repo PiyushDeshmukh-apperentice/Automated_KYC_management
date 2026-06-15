@@ -1,0 +1,767 @@
+{
+  "name": "Retrieval Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/create-session",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=customer_id",
+              "value": "={{ $json.customer_id }}"
+            },
+            {
+              "name": "customer_name",
+              "value": "={{ $json.customer_name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -336,
+        640
+      ],
+      "id": "2d8566f0-cf1b-42d9-9b2d-572bc8d75b8f",
+      "name": "Create Session"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8001/aadhaar/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        48,
+        640
+      ],
+      "id": "e9ef1a1c-497d-4ca0-88d8-0d4f8a2ec912",
+      "name": "Retrieve Aadhaar",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8001/pan/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        304,
+        640
+      ],
+      "id": "18bc55e8-7a05-4bfe-9aee-1896d8e81a87",
+      "name": "Retrieve PAN"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8001/driving-license/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        576,
+        640
+      ],
+      "id": "ab422452-bfd7-45e4-8d0c-edfc5290af70",
+      "name": "Retrieve Driving License"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8001/passport/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        928,
+        640
+      ],
+      "id": "3c3f7c88-8c9f-4a28-9f9b-6e8f03634858",
+      "name": "Retrieve Passport",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        176,
+        640
+      ],
+      "id": "b94b1edf-b49f-48df-b12c-a38f307287d2",
+      "name": "Aadhaar JSON"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        432,
+        640
+      ],
+      "id": "f4e6c07d-b459-46ad-ac10-303b31e00a78",
+      "name": "Pan JSON"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        768,
+        640
+      ],
+      "id": "c4ce0ec0-c7d0-4496-8488-f61cdbda54b2",
+      "name": "Driving License JSON"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8002/bank-statement/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        48,
+        832
+      ],
+      "id": "2a56348d-d299-45f1-a8b3-d65e3d881e77",
+      "name": "Retrieve Bank statements"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8002/cibil/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        176,
+        832
+      ],
+      "id": "2a81ec08-cec1-47a2-a971-69d3f031eb08",
+      "name": "Retrieve CIBIL"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8002/itr/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        304,
+        832
+      ],
+      "id": "95c119bd-44db-485f-b9a6-8065fa7edc2d",
+      "name": "Retrieve ITR",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8002/wealth/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        832
+      ],
+      "id": "e2d60399-50f9-4b27-9576-01a891a7afe3",
+      "name": "Retrieve Wealth Data",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8002/mutual-funds/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        832
+      ],
+      "id": "0c44589d-45b9-4656-9be5-2ed16fe7abf3",
+      "name": "Retrieve Mutual Funds",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8002/insurance/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        800,
+        832
+      ],
+      "id": "1675343e-1e85-4ecd-868f-2cb05b6299bd",
+      "name": "Retrieve Insurance",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=http://127.0.0.1:8003/profile/{{ $('When Executed by Another Workflow').item.json.customer_name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        48,
+        464
+      ],
+      "id": "5a87010c-1361-4a01-a389-9ec78eae6a00",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const aadhaar =\n    $('Aadhaar JSON').first().json;\n\nconst pan =\n    $('Pan JSON').first().json;\n\nconst dl =\n    $('Driving License JSON').first().json;\n\n\n// =====================================================\n// OPTIONAL PASSPORT\n// =====================================================\n\nlet passport = null;\n\ntry {\n\n    passport =\n        $('Retrieve Passport').first().json;\n\n} catch (e) {\n\n    passport = null;\n}\n\n\n// =====================================================\n// EXTRACT AADHAAR DATA\n// =====================================================\n\nconst aadhaarData =\n    aadhaar.CustomerIdentity.Aadhaar;\n\n\n// =====================================================\n// EXTRACT PAN DATA\n// =====================================================\n\nconst panData =\n    pan.PANCard;\n\n\n// =====================================================\n// EXTRACT DL DATA\n// =====================================================\n\nconst dlData =\n    dl.DrivingLicense;\n\n\n// =====================================================\n// BUILD UNIFIED PROFILE\n// =====================================================\n\nconst unifiedIdentity = {\n\n    identity: {\n\n        full_name:\n            aadhaarData.Name,\n\n        dob:\n            aadhaarData.DOB,\n\n        gender:\n            aadhaarData.Gender,\n\n        address: {\n\n            street:\n                aadhaarData.Address.Street,\n\n            city:\n                aadhaarData.Address.City,\n\n            state:\n                aadhaarData.Address.State,\n\n            pin:\n                aadhaarData.Address.PIN\n        },\n\n        aadhaar: {\n\n            aadhaar_number:\n                aadhaarData.AadhaarNumber\n        },\n\n        pan: {\n\n            pan_number:\n                panData.PANNumber,\n\n            category:\n                panData.Category\n        },\n\n        driving_license: {\n\n            dl_number:\n                dlData.DLNumber,\n\n            valid_till:\n                dlData.ValidTill\n        },\n\n        passport:\n            passport || null\n    }\n};\n\n\n// =====================================================\n// RETURN\n// =====================================================\n\nreturn [\n    {\n        json: unifiedIdentity\n    }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        640
+      ],
+      "id": "2187ca1f-1d34-40bc-9024-bfc46a2788f4",
+      "name": "Identity Merged"
+    },
+    {
+      "parameters": {
+        "jsCode": "const bank =\n    $('Retrieve Bank statements').first().json;\n\nconst cibil =\n    $('Retrieve CIBIL').first().json;\n\nconst itr =\n    $('Retrieve ITR').first().json;\n\nconst wealth =\n    $('Retrieve Wealth Data').first().json;\n\nconst mf =\n    $('Retrieve Mutual Funds').first().json;\n\nconst insurance =\n    $('Retrieve Insurance').first().json;\n\n\n// =====================================================\n// BUILD FINANCIAL OBJECT\n// =====================================================\n\nconst financialProfile = {\n\n    financial: {\n\n        bank_statement:\n            bank.data,\n\n        cibil:\n            cibil.data,\n\n        itr:\n            itr.data,\n\n        wealth:\n            wealth.data,\n\n        mutual_funds:\n            mf.data,\n\n        insurance:\n            insurance.data\n    }\n};\n\n\nreturn [\n    {\n        json: financialProfile\n    }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        832
+      ],
+      "id": "5e574b7e-b66c-4c5c-9029-02d9925438b5",
+      "name": "Bank Data Merged"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "767131e9-0552-4bca-9059-664129bab232",
+              "name": "data.personal_info.phone",
+              "value": "={{ $json.data.personal_info.phone }}",
+              "type": "number"
+            },
+            {
+              "id": "8c8ca391-a43d-4857-9e00-31bd43d41bed",
+              "name": "data.personal_info.gender",
+              "value": "={{ $json.data.personal_info.gender }}",
+              "type": "string"
+            },
+            {
+              "id": "861fbc66-a920-4e81-9a02-890f0a7c46de",
+              "name": "data.personal_info.email",
+              "value": "={{ $json.data.personal_info.email }}",
+              "type": "string"
+            },
+            {
+              "id": "5ebd8d92-ac4e-49eb-a3eb-7ae2edaeb908",
+              "name": "data.personal_info.marital_status",
+              "value": "={{ $json.data.personal_info.marital_status }}",
+              "type": "string"
+            },
+            {
+              "id": "ae8b9e8d-86f1-49d0-8a8a-55f2400fd5ce",
+              "name": "data.employment.occupation",
+              "value": "={{ $json.data.employment.occupation }}",
+              "type": "string"
+            },
+            {
+              "id": "dac5c07b-ffdb-448d-839f-e426d02baa82",
+              "name": "data.employment.company",
+              "value": "={{ $json.data.employment.company }}",
+              "type": "string"
+            },
+            {
+              "id": "dd192909-dea3-4431-87cb-613d4e6506a6",
+              "name": "customer",
+              "value": "={{ $json.customer }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        464
+      ],
+      "id": "84456940-1c2a-440e-8c38-a0f7bc7805f9",
+      "name": "Filtering out"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Help in categorizing the customer please who's name is {{ $json.customer }} and is a {{ $json.identity.gender }} working as {{ $json.data.employment.occupation }} with a CIBIL Score of {{ $json.financial.cibil.credit_score }}, has declared income of  {{ $json.financial.itr.declared_income }} and estimated wealth of {{ $json.financial.wealth.estimated_net_worth }} ",
+        "options": {
+          "systemMessage": "**Role:**\nYou are a Senior Banking Wealth Management Agent. Your task is to analyze a customer's consolidated profile and assign a specific banking category.\n\n**Categorization Rules (Priority Order):**\n1. **NRI (Non-Resident Indian):** If the 'country' or 'location' is NOT \"India\".\n2. **Farmer:** If the 'occupation' relates to agriculture, farming, or primary sector cultivation.\n3. **High Networth Individual (HNWI):** - Annual Income > ₹5,000,000 (50 Lakhs) OR \n   - Net Worth > ₹50,000,000 (5 Crores).\n4. **Mass Affluent:** If Annual Income is between ₹1,000,000 (10 Lakhs) and ₹5,000,000 (50 Lakhs).\n5. **Mass:** Resident individuals with income below ₹1,000,000 (10 Lakhs).\n\n**Task:**\nAnalyze the provided JSON metrics. Output a JSON response identifying the customer and their assigned category.\n\n**Output Format:**\n{\n  \"customer_name\": \"string\",\n  \"assigned_category\": \"Mass | Mass Affluent | HNWI | Farmer | NRI\",\n}\n\n\"CRITICAL: Output ONLY the JSON object. Do not include any conversational text, notes, or preamble.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1936,
+        688
+      ],
+      "id": "57bcd96a-b9ce-4af3-a8c5-835c7c0f4195",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Create Session').item.json.session_id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2032,
+        928
+      ],
+      "id": "e79ac8a3-cbf5-458a-aa0b-175f7f1191c7",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        944
+      ],
+      "id": "0eda6208-9923-48da-b690-aa5713d13874",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "PHBJpgvRcxqagllv",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "091d1f4c-c074-4ba7-9a45-330e4c40c9be",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -592,
+        640
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1392,
+        528
+      ],
+      "id": "b455cbb1-760d-4f42-b172-cdb6714a6dae",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Grab AI Output (Categorization)\nconst rawAiOutput = $input.first().json.output;\nlet category = \"Mass\"; \ntry {\n    // Clean up markdown formatting if the LLM included it\n    const cleanJson = rawAiOutput.replace(/```json/gi, '').replace(/```/g, '').trim();\n    const parsed = JSON.parse(cleanJson);\n    category = parsed.assigned_category || \"Mass\";\n} catch (e) {\n    console.log(\"AI Parsing failed, defaulting to Mass\");\n}\n\n// 2. Grab the FULL unified data from the 'Code in JavaScript1' node\n// This is the \"Fat List\" you worked on earlier\nconst fullCustomerData = $('Code in JavaScript1').first().json; \n\n// 3. THE SECURITY GUARD (Redacting sensitive numeric IDs for output)\nconst requiredFields = {\n    \"identity.aadhaar.aadhaar_number\": \"Aadhaar Card\",\n    \"identity.pan.pan_number\": \"PAN Card\",\n    \"financial.bank_statement\": \"Bank Statements\",\n    \"financial.cibil\": \"CIBIL Report\"\n};\n\nfunction getNestedValue(obj, path) {\n    return path.split('.').reduce((acc, part) => acc && acc[part], obj);\n}\n\nlet missingDocs = [];\nfor (const [path, docName] of Object.entries(requiredFields)) {\n    const val = getNestedValue(fullCustomerData, path);\n    // Logic check: if field is missing or empty object\n    if (!val || (typeof val === 'object' && Object.keys(val).length === 0)) {\n        missingDocs.push(docName);\n    }\n}\n\n// 4. Dynamic Routing Logic\nlet nextAgent = \"Decision Making Agent\";\nlet taskType = \"None\";\nlet logEntry = `Retrieval successful. Category: ${category}.`;\n\nif (missingDocs.length > 0) {\n    nextAgent = \"Template Agent\";\n    taskType = \"Email\";\n    logEntry = `Retrieval Halted. Missing: ${missingDocs.join(\", \")}.`;\n}\n\n// 5. Final Output Construction\nreturn [{\n  json: {\n    customer_data: fullCustomerData, // This now contains the full merged JSON\n    customer_category: category,\n    discrepancy_reason: missingDocs.length > 0 ? `Missing: ${missingDocs.join(\", \")}` : \"\",\n    log_entry: logEntry,\n    task_type: taskType,\n    call_agent: nextAgent \n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2304,
+        688
+      ],
+      "id": "8d50e958-9a45-445e-b3c3-440a1db82757",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1552,
+        688
+      ],
+      "id": "dae32e93-03d2-452f-9b45-629fa2fdee71",
+      "name": "Merged_information"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ensure the node is set to \"Run Once for All Items\" in the Settings tab\nconst allItems = $input.all();\nlet unifiedProfile = {};\n\n// Helper function to deeply merge and handle mismatched keys\nfunction mergeData(target, source) {\n    for (const key in source) {\n        if (source[key] instanceof Object && key in target) {\n            mergeData(target[key], source[key]);\n        } else if (source[key] !== null && source[key] !== undefined) {\n            target[key] = source[key];\n        }\n    }\n}\n\n// Loop through the arriving items (Profile, Identity, Bank)\nfor (const item of allItems) {\n    const data = item.json;\n    \n    // Normalize mismatched identity keys\n    const name = data.customer || data.identity?.full_name || data.full_name;\n    if (name) unifiedProfile.customer_name = name;\n\n    // Normalize mismatched occupation keys\n    const occupation = data.occupation || data.data?.employment?.occupation;\n    if (occupation) unifiedProfile.occupation = occupation;\n\n    // Merge the rest of the financial and identity structures\n    mergeData(unifiedProfile, data);\n}\n\n// Return one single item with all keys resolved\nreturn { json: unifiedProfile };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1728,
+        688
+      ],
+      "id": "11a9cd19-2ff8-4601-ae7b-dfa69fdfd188",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        2160,
+        928
+      ],
+      "id": "7e616922-9ba2-4339-8a02-ebb647e436e5",
+      "name": "Insert row in Data table"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Create Session": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Aadhaar",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Retrieve Bank statements",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Aadhaar": {
+      "main": [
+        [
+          {
+            "node": "Aadhaar JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve PAN": {
+      "main": [
+        [
+          {
+            "node": "Pan JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Driving License": {
+      "main": [
+        [
+          {
+            "node": "Driving License JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Passport": {
+      "main": [
+        [
+          {
+            "node": "Identity Merged",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aadhaar JSON": {
+      "main": [
+        [
+          {
+            "node": "Retrieve PAN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pan JSON": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Driving License",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Driving License JSON": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Passport",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Bank statements": {
+      "main": [
+        [
+          {
+            "node": "Retrieve CIBIL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve CIBIL": {
+      "main": [
+        [
+          {
+            "node": "Retrieve ITR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve ITR": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Wealth Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Wealth Data": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Mutual Funds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Mutual Funds": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Insurance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Insurance": {
+      "main": [
+        [
+          {
+            "node": "Bank Data Merged",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Identity Merged": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Filtering out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bank Data Merged": {
+      "main": [
+        [
+          {
+            "node": "Merged_information",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Filtering out": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merged_information",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merged_information": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row in Data table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2e88ac3f-91ef-4360-8eed-3082332d544e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1a82068c1ee9dc496c99a5049657e2eb88f5fb3b9c48b12258672f91fedcd5eb"
+  },
+  "id": "2S72Jb6uunvbT6ZJ",
+  "tags": []
+}
